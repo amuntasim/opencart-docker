@@ -9,7 +9,7 @@ services:
     expose:
       - "9000"
     environment:
-      MYSQL_HOST: mysql
+      MYSQL_HOST: cloudsql-proxy
       MYSQL_USERNAME: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       DB_NAME: ${MYSQL_DATABASE}
@@ -22,18 +22,15 @@ services:
       - ./apache/sites:/etc/apache2/sites-available
       - ../:/var/www
     ports:
-      - "80:80"
+      - "8001:80"
     depends_on:
       - php-fpm
-
-  mysql:
-    image: mysql:5.7
-    ports:
-      - "3306:3306"
+  
+  cloudsql-proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.16
+    command: /cloud_sql_proxy --dir=/cloudsql -instances=ivipni-279915:asia-southeast1:opencart=tcp:0.0.0.0:3306 -credential_file=/secrets/cloudsql/credentials.json
     volumes:
-      - ./database/mysql:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    - ./cloudsql-credentials.json:/secrets/cloudsql/credentials.json        
+    ports:
+    - 127.0.0.1:3306:3306
+
