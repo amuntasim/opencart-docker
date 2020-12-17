@@ -7,10 +7,10 @@ This repository should make it super simple to run [Opencart](http://www.opencar
 2. Add the opencart-docker files:
   - if you are using Git already you could add it as a submodule:
       
-          $ git submodule add https://github.com/DockerIt/opencart-docker.git
+          $ git submodule add https://github.com/amuntasim/opencart-docker.git
   - if not, either copy the files or clone into the project directory:
 
-          $ git clone https://github.com/DockerIt/opencart-docker.git
+          $ git clone https://github.com/amuntasim/opencart-docker.git
 3. It should look a bit like this:
 
         |-- project-root
@@ -25,10 +25,13 @@ This repository should make it super simple to run [Opencart](http://www.opencar
 4. Copy the .env-example to .env and make any changes to the environment variables that you want.
 
         $ cp .env-example .env
+        2> copy modificcation.xml to /upload/system
+        3> copy cloudsql-credentials.json into opencart-docker
         
 5. Now, in the opencart-docker folder, we want run it and serve Opencart. The simplest way is:
         
-        $ docker-compose up -d apache mysql
+     $ docker-compose build   
+     $ docker-compose up -d 
         
 6. Finally we need to be able to access the site. We need to put the docker ip address into the HOSTS file.
 This will be different on different operating systems.
